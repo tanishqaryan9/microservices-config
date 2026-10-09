@@ -1,10 +1,15 @@
 package com.microservices.Job.Job;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.Job.Clients.CompanyClient;
 import com.microservices.Job.Clients.ReviewClient;
 import com.microservices.Job.DTO.JobWithCompanyDTO;
 import com.microservices.Job.External.Company;
 import com.microservices.Job.External.Reviews;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,7 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +35,26 @@ public class JobServiceImpl implements JobService{
 //    private final RestTemplate restTemplate;
     private final CompanyClient companyClient;
     private final ReviewClient reviewClient;
+    public final HttpServletResponse response;
+//    int attempts = 0;
 
     @Override
+    //Use @Retry for retries if application goes down
+//    @Retry(name = "companyBreaker", fallbackMethod = "companyFallback")
+    //Use @RateLimiter for adding rate limit in APIs
+    @RateLimiter(name = "companyBreaker", fallbackMethod = "companyFallback")
+//    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyFallback")
     public List<JobWithCompanyDTO> getAllJobs() {
+//        System.out.println("Attempts: "+ (++attempts));
         List<Job> jobs=jobRepository.findAll();
         return jobs.stream().map(job-> convertToDTO(job)).toList();
+    }
+
+    public List<String> companyFallback(Exception e)
+    {
+        List<String> l = new ArrayList<>();
+        l.add("Dummy");
+        return l;
     }
 
     @Override
