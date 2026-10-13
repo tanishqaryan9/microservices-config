@@ -20,6 +20,8 @@ public class CompanyDTO {
 
     private String description;
 
+    private Double avgRating;
+
     private List<Integer> jobs;
 
     private List<Integer> reviews;

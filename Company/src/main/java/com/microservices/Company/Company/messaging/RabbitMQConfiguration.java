@@ -1,4 +1,4 @@
-package com.microservices.Reviews.Reviews.messaging;
+package com.microservices.Company.Company.messaging;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -28,6 +28,7 @@ public class RabbitMQConfiguration {
         return new JacksonJsonMessageConverter();
     }
 
+    @Bean
     public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory)
     {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);

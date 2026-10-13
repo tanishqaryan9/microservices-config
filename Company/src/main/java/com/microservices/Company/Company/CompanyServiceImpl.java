@@ -1,5 +1,8 @@
 package com.microservices.Company.Company;
 
+import com.microservices.Company.Company.Clients.ReviewClient;
+import com.microservices.Company.Company.DTO.ReviewMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ public class CompanyServiceImpl implements CompanyService{
 
     private final CompanyRepository companyRepository;
     private final ModelMapper modelMapper;
+    private final ReviewClient reviewClient;
 
     @Override
     public List<CompanyDTO> getAllCompanies() {
@@ -72,5 +76,14 @@ public class CompanyServiceImpl implements CompanyService{
         });
         companyRepository.save(company);
         return modelMapper.map(company, CompanyDTO.class);
+    }
+
+    @Override
+    @Transactional
+    public void updateCompanyRating(ReviewMessage reviewMessage) {
+        Company company = companyRepository.findById(reviewMessage.getCompanyId())
+                .orElseThrow(()->new IllegalArgumentException());
+        company.setAvgRating(reviewClient.getAverageRating(reviewMessage.getCompanyId()));
+        companyRepository.save(company);
     }
 }

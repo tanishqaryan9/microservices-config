@@ -43,6 +43,14 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
+    public Double getAverageRating(Long companyId) {
+        List<Reviews> allReviews = reviewRepository.findByCompanyId(companyId);
+        Double avg = allReviews.stream().mapToDouble(o->o.getRating()).average().orElse(0.0);
+        return avg;
+
+    }
+
+    @Override
     public void deleteReview(Long reviewId) {
         Reviews review=reviewRepository.findById(reviewId).orElseThrow(()->new IllegalArgumentException("Review with id: "+reviewId+" not found."));
         reviewRepository.delete(review);

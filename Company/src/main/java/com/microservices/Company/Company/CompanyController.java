@@ -1,6 +1,8 @@
 package com.microservices.Company.Company;
 
+import com.microservices.Company.Company.DTO.ReviewMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +45,12 @@ public class CompanyController {
     {
         companyService.deleteCompany(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/updateRating")
+    public ResponseEntity<Void> updateCompanyRating(@RequestBody ReviewMessage reviewMessage){
+        companyService.updateCompanyRating(reviewMessage);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")

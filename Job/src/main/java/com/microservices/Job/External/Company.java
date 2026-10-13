@@ -9,5 +9,7 @@ public class Company {
 
     private String name;
 
+    private Double avgRating;
+
     private String description;
 }

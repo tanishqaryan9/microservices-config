@@ -13,4 +13,6 @@ public interface ReviewService {
     void deleteReview(Long reviewId);
 
     ReviewDTO updateReview(Long reviewId, ReviewDTO dto);
+
+    Double getAverageRating(Long companyId);
 }

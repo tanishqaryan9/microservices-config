@@ -1,5 +1,6 @@
 package com.microservices.Company.Company;
 
+import com.microservices.Company.Company.DTO.ReviewMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface CompanyService {
     void deleteCompany(Long id);
 
     CompanyDTO updateCompanyValue(Long id, Map<String, Object> dto);
+
+    public void updateCompanyRating(ReviewMessage reviewMessage);
 }

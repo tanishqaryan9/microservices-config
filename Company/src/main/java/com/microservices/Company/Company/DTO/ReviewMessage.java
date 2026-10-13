@@ -1,4 +1,4 @@
-package com.microservices.Reviews.Reviews.DTO;
+package com.microservices.Company.Company.DTO;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ public class ReviewMessage {
 
     private String review;
 
-    private double rating;
+    private Double rating;
 
     private Long companyId;
 }

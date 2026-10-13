@@ -1,6 +1,8 @@
 package com.microservices.Reviews.Reviews;
 
+import com.microservices.Reviews.Reviews.messaging.ReviewMessageProducer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,7 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final ReviewMessageProducer reviewMessageProducer;
 
     @GetMapping
     public ResponseEntity<List<ReviewDTO>> getAllReviews(@RequestParam Long companyId)
@@ -25,10 +28,13 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReviewById(reviewId));
     }
 
+
     @PostMapping
     public ResponseEntity<ReviewDTO> postReview(@RequestParam Long companyId, @RequestBody ReviewDTO dto)
     {
-        return ResponseEntity.ok(reviewService.postReview(companyId, dto));
+        ReviewDTO review = reviewService.postReview(companyId, dto);
+        reviewMessageProducer.sendMessage(review);
+        return ResponseEntity.ok(review);
     }
 
     @DeleteMapping("/{reviewId}")
@@ -42,5 +48,11 @@ public class ReviewController {
     public ResponseEntity<ReviewDTO> updateReview(@PathVariable Long reviewId, @RequestBody ReviewDTO dto)
     {
         return ResponseEntity.ok(reviewService.updateReview(reviewId,dto));
+    }
+
+    @GetMapping("/averageRating")
+    public ResponseEntity<Double> getAverageRating(@RequestParam Long companyId)
+    {
+        return ResponseEntity.ok(reviewService.getAverageRating(companyId));
     }
 }

@@ -42,20 +42,20 @@ public class JobServiceImpl implements JobService{
     //Use @Retry for retries if application goes down
 //    @Retry(name = "companyBreaker", fallbackMethod = "companyFallback")
     //Use @RateLimiter for adding rate limit in APIs
-    @RateLimiter(name = "companyBreaker", fallbackMethod = "companyFallback")
-//    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyFallback")
+    @RateLimiter(name = "companyBreaker")
+    @CircuitBreaker(name = "companyBreaker")
     public List<JobWithCompanyDTO> getAllJobs() {
 //        System.out.println("Attempts: "+ (++attempts));
         List<Job> jobs=jobRepository.findAll();
         return jobs.stream().map(job-> convertToDTO(job)).toList();
     }
 
-    public List<String> companyFallback(Exception e)
-    {
-        List<String> l = new ArrayList<>();
-        l.add("Dummy");
-        return l;
-    }
+//    public List<String> companyFallback(Exception e)
+//    {
+//        List<String> l = new ArrayList<>();
+//        l.add("Dummy");
+//        return l;
+//    }
 
     @Override
     public JobDTO createJob(JobDTO jobDTO) {

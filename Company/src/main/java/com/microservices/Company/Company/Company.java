@@ -18,6 +18,8 @@ public class Company {
 
     private String description;
 
+    private Double avgRating;
+
     private List<Integer> jobs=new ArrayList<>();
 
     private List<Integer> reviews=new ArrayList<>();
