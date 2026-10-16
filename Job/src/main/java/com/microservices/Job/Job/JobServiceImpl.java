@@ -35,7 +35,7 @@ public class JobServiceImpl implements JobService{
 //    private final RestTemplate restTemplate;
     private final CompanyClient companyClient;
     private final ReviewClient reviewClient;
-    public final HttpServletResponse response;
+//    public final HttpServletResponse response;
 //    int attempts = 0;
 
     @Override
